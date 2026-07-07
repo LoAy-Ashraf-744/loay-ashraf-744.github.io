@@ -8,7 +8,7 @@ export const projects = [
     description: "A landing page is a sales funnel compressed into one scroll. Built for Triple S Pro (an Arabic-first AI education community), it features native RTL layout and bilingual support.",
     longDescription: "A landing page is a sales funnel compressed into one scroll. This page was built for Triple S Pro, an Arabic-first AI education community, and solves a real problem: most landing page templates are built for English audiences and break under RTL layout and cultural context. This page is native Arabic with proper right-to-left design, bilingual support baked in from the start, and strategic sections that move from social proof through value proposition to conversion. It demonstrates the ability to design conversion-focused pages that work across languages without compromise.",
     tags: ["Next.js", "Tailwind CSS", "Framer Motion", "TypeScript"],
-    screenshot: "/images/projects/triples.png",
+    screenshot: "/projects/triples.png",
     liveUrl: "https://thets.plus",
     type: "Marketing Landing Page"
   },
@@ -20,7 +20,7 @@ export const projects = [
     description: "Joud is a landing page for a company that sells products. It features a modern, responsive design focused on user experience.",
     longDescription: "Joud is a landing page for a company that sells products. It is a modern and responsive design with a focus on user experience. It is also mobile-friendly and easy to navigate. This is for anyone who wants to create a professional and modern landing page for their business.",
     tags: ["Next.js", "Tailwind CSS", "Framer Motion", "TypeScript"],
-    screenshot: "/images/projects/joud.png",
+    screenshot: "/projects/joud.png",
     liveUrl: "https://jo-ud.vercel.app",
     type: "Product Landing Page"
   },
@@ -42,7 +42,7 @@ export const projects = [
       { name: "Next.js", icon: "react", color: "rgba(97, 218, 251, 0.08)" },
       { name: "Tailwind CSS", icon: "tailwind", color: "rgba(56, 189, 248, 0.08)" }
     ],
-    screenshot: "/images/projects/markmap.png"
+    screenshot: "/projects/markmap.png"
   },
 
   // --- AUTOMATION WORKFLOWS ---
@@ -57,7 +57,7 @@ export const projects = [
     githubUrl: "https://github.com/LoAy-Ashraf-744",
     downloadUrl: "/downloads/lead-gen.json",
     aiPowered: false,
-    screenshot: "/images/projects/lead-gen.png"
+    screenshot: "/projects/lead-gen.png"
   },
   {
     id: "auto-2",
@@ -70,6 +70,6 @@ export const projects = [
     githubUrl: "https://github.com/LoAy-Ashraf-744",
     downloadUrl: "/downloads/ugc-finder.json",
     aiPowered: true,
-    screenshot: "/images/projects/ugc-finder.png"
+    screenshot: "/projects/ugc-finder.png"
   }
 ];
