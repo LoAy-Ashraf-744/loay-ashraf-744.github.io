@@ -16,8 +16,8 @@ export default function TechGrid() {
       </div>
       
       {/* Row 2 */}
-      <div className={`${styles.iconBox} ${styles.darkBg}`}>
-        <img src="/logo.png" alt="Logo" style={{ width: '64px', height: '64px', objectFit: 'contain' }} />
+      <div className={`${styles.iconBox} ${styles.whiteBg}`}>
+        <SiNextdotjs size={64} color="#000" />
       </div>
       <div className={`${styles.iconBox} ${styles.darkBg}`}>
         <img src="/n8n-color.svg" alt="n8n" style={{ width: '64px', height: '64px', objectFit: 'contain' }} />
