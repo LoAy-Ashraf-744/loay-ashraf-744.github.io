@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000">
+  <!-- Black Background -->
+  <rect width="100%" height="100%" fill="black" />
+  
+  <g fill="white">
+    <!-- Left vertical bar -->
+    <rect x="269" y="300" width="46" height="400" />
+    
+    <!-- Bottom horizontal bar connecting the two vertical lines -->
+    <rect x="269" y="654" width="228" height="46" />
+    
+    <!-- Middle vertical bar -->
+    <rect x="451" y="300" width="46" height="400" />
+    
+    <!-- Horizontal crossbar cutting across -->
+    <rect x="341" y="472" width="390" height="46" />
+    
+    <!-- Diagonal right leg -->
+    <polygon points="451,300 497,300 686,700 640,700" />
+  </g>
+</svg>
