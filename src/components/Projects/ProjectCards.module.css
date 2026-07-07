@@ -1,0 +1,279 @@
+/* Shared Card Container Styles */
+.cardBase {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  position: relative;
+}
+
+.cardBase:hover {
+  border-color: var(--card-border-hover);
+  box-shadow: 0 0 40px var(--card-glow), 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+.cardContent {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  position: relative;
+  z-index: 2;
+}
+
+.cardTitle {
+  font-family: var(--font-outfit, 'Outfit', sans-serif);
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--color-text);
+}
+
+.cardDesc {
+  font-family: var(--font-inter, 'Inter', sans-serif);
+  font-size: 0.875rem;
+  color: var(--color-accent);
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+  flex-grow: 1;
+}
+
+/* Button Styles */
+.actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: auto;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: none; /* For custom cursor */
+  transition: all 0.2s ease;
+}
+
+.btnPrimary {
+  background: rgba(255,255,255,0.1);
+  color: var(--action-primary);
+  border: 1px solid rgba(255,255,255,0.2);
+}
+
+.btnPrimary:hover {
+  background: rgba(255,255,255,0.2);
+  border-color: rgba(255,255,255,0.4);
+}
+
+.btnGhost {
+  background: transparent;
+  color: var(--action-ghost);
+  border: 1px solid transparent;
+}
+
+.btnGhost:hover {
+  color: var(--color-text);
+  background: rgba(255,255,255,0.05);
+}
+
+/* -----------------------------
+   Landing Page Card Specific
+------------------------------ */
+.landingCard {
+  flex-direction: row;
+}
+
+@media (max-width: 768px) {
+  .landingCard {
+    flex-direction: column;
+  }
+}
+
+.landingImageWrapper {
+  width: 45%;
+  position: relative;
+  overflow: hidden;
+  border-right: 1px solid rgba(255,255,255,0.05);
+}
+
+@media (max-width: 768px) {
+  .landingImageWrapper {
+    width: 100%;
+    height: 200px;
+    border-right: none;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+}
+
+.landingImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.landingCard:hover .landingImage {
+  transform: scale(1.03);
+}
+
+.imageOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(transparent 50%, rgba(0,0,0,0.6));
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.landingCard:hover .imageOverlay {
+  opacity: 1;
+}
+
+/* -----------------------------
+   Application Card Specific
+------------------------------ */
+.appCard {
+  transform-style: preserve-3d;
+  perspective: 1000px;
+}
+
+.horizontalCardContent {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .horizontalCardContent {
+    flex-direction: column;
+  }
+}
+
+.appImageWrapper {
+  width: 45%;
+  position: relative;
+  overflow: hidden;
+  background: #111; /* fallback */
+  border-right: 1px solid rgba(255,255,255,0.05);
+}
+
+@media (max-width: 768px) {
+  .appImageWrapper {
+    width: 100%;
+    height: 200px;
+    border-right: none;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+}
+
+.appImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.8;
+  transition: opacity 0.3s;
+}
+
+.appCard:hover .appImage {
+  opacity: 1;
+}
+
+.techStack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.techBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.3rem 0.6rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.05);
+}
+
+.techLabel {
+  font-family: var(--font-fira-code, monospace);
+  font-size: 0.7rem;
+  color: #ccc;
+}
+
+.tagBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.3rem 0.6rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.05);
+  background: rgba(255,255,255,0.03);
+  font-family: var(--font-fira-code, monospace);
+  font-size: 0.7rem;
+  color: #ccc;
+}
+
+/* -----------------------------
+   Automation Card Specific
+------------------------------ */
+.automationCard {
+  flex-direction: row;
+}
+
+@media (max-width: 768px) {
+  .automationCard {
+    flex-direction: column;
+  }
+}
+
+.automationImageWrapper {
+  width: 45%;
+  position: relative;
+  overflow: hidden;
+  border-right: 1px solid rgba(255,255,255,0.05);
+}
+
+@media (max-width: 768px) {
+  .automationImageWrapper {
+    width: 100%;
+    height: 200px;
+    border-right: none;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+}
+
+.automationImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.automationCard:hover .automationImage {
+  transform: scale(1.05);
+}
+
+.aiBadge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: var(--ai-accent);
+  color: white;
+  font-size: 0.65rem;
+  font-weight: 600;
+  padding: 0.2rem 0.5rem;
+  border-radius: 100px;
+  letter-spacing: 0.5px;
+  box-shadow: 0 0 10px rgba(124, 58, 237, 0.4);
+  z-index: 10;
+}

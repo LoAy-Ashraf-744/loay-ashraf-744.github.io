@@ -1,0 +1,382 @@
+{
+  "name": "CreatorScope Unified Workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "d283a85e-7554-474a-82d3-e4bc9e3b917e",
+        "responseMode": "responseNode",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Access-Control-Allow-Origin",
+                "value": "*"
+              }
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        200,
+        200
+      ],
+      "id": "10619df0-9c7f-4dc5-9ffe-33c94ec8c93f",
+      "name": "Webhook",
+      "webhookId": "d283a85e-7554-474a-82d3-e4bc9e3b917e"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json.body.action }}",
+              "value2": "outreach"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        440,
+        200
+      ],
+      "id": "if-outreach-001",
+      "name": "Is Outreach?"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json.body.action }}",
+              "value2": "send_email"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        660,
+        340
+      ],
+      "id": "if-send-email-001",
+      "name": "Is Send Email?"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Search for UGC content creators with the following requirements:\n\nPlatform: {{ $('Webhook').first().json.body.platform }}\nCountry: {{ $('Webhook').first().json.body.country }}\nLanguage: {{ $('Webhook').first().json.body.language }}\nGender: {{ $('Webhook').first().json.body.gender }}\nKeyword/Niche: {{ $('Webhook').first().json.body.keyword }}\nMinimum Followers: {{ $('Webhook').first().json.body.min_followers }}\nMaximum Followers: {{ $('Webhook').first().json.body.max_followers }}\nMinimum Videos: {{ $('Webhook').first().json.body.min_videos }}\n\nFind matching profiles now.",
+        "options": {
+          "systemMessage": "# Role\nYou are an expert UGC Content Creator Researcher & Scout. Your mission is to find high-quality social media profiles on TikTok and Instagram that match specific brand requirements.\n\n# Search Parameters\nYou will receive the following criteria from the user message:\n- Platform (TikTok or Instagram)\n- Country/Region\n- Language\n- Gender (Male or Female)\n- Keyword/Niche\n- Follower Range (min and max)\n- Video Count Range (min and max)\n\n# Search Strategy\n1. Use the Search Tool (Tavily) to find content creator PROFILES on the specified platform.\n2. Build smart search queries combining the platform, country, niche keyword, and gender.\n   - Example queries:\n     - site:tiktok.com [keyword] [country] creator profile\n     - [keyword] content creator [country] [platform] [gender]\n     - [platform] influencer [keyword] [country] [language]\n3. Run multiple search queries with different keyword combinations to maximize coverage.\n4. Try to find at least 5 to 10 distinct creators.\n\n# Strict Filtering Rules\n- REJECT links that point to specific videos (URLs containing /video/, /reel/, /p/). Only return links to the main profile/account page.\n- REJECT creators who clearly don't match the specified country, language, or gender.\n- REJECT creators whose follower count is clearly outside the specified range.\n- REJECT duplicate profiles.\n- ACCEPT only direct profile URLs (e.g., tiktok.com/@username, instagram.com/username).\n\n# Data Estimation Policy\n- If follower count is not visible in the search snippet, provide your best estimate.\n- If video count is not available, estimate based on account activity level.\n- If contact info is not publicly available, set it to N/A.\n\n# Output Format\nYou must return ONLY a valid JSON array. Do NOT include any markdown formatting, code blocks, or conversational text. Return ONLY the raw JSON array.\n\nRequired JSON Structure:\n[\n  {\n    \"name\": \"Full Name or Username\",\n    \"profile_url\": \"Direct link to profile page\",\n    \"follower_count\": 50000,\n    \"videos_count\": 120,\n    \"contact_info\": \"Email or Phone or Linktree, otherwise N/A\",\n    \"country\": \"Country\",\n    \"language\": \"Language\",\n    \"gender\": \"Male or Female\",\n    \"niche\": \"Content category\"\n  }\n]\n\n# Critical Rules\n1. Return ONLY the JSON array, nothing else.\n2. follower_count and videos_count must be numbers, not strings.\n3. profile_url must be a direct link to the profile, not to a video.\n4. Never fabricate profile URLs, only return URLs found in search results.\n5. Sort results by follower_count descending."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        900,
+        480
+      ],
+      "id": "685cfe2a-c232-41cc-be49-b317334cff9e",
+      "name": "UGC Creator Researcher"
+    },
+    {
+      "parameters": {
+        "query": "={{ $fromAI('Query', '', 'string') }}",
+        "options": {}
+      },
+      "type": "@tavily/n8n-nodes-tavily.tavilyTool",
+      "typeVersion": 1,
+      "position": [
+        1060,
+        700
+      ],
+      "id": "78e67ae5-d8b3-450a-9103-836477c27010",
+      "name": "Tavily Search",
+      "credentials": {
+        "tavilyApi": {
+          "id": "v2FxBhmgej6mUFvQ",
+          "name": "Tavily account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        900,
+        700
+      ],
+      "id": "a4501424-00d4-464f-add2-b8ecfb2c0caf",
+      "name": "Gemini (Search)",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "a9X48ny3Qi0mJt7m",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "let rawText = $json.output;\nlet dataArray = null;\nlet parseError = null;\n\ntry {\n  let cleanText = rawText\n    .replace(/```json\\s*/gi, '')\n    .replace(/```\\s*/gi, '')\n    .trim();\n\n  const jsonMatch = cleanText.match(/\\[\\s*\\{[\\s\\S]*\\}\\s*\\]/m);\n  if (jsonMatch) {\n    cleanText = jsonMatch[0];\n  }\n\n  dataArray = JSON.parse(cleanText);\n} catch (e) {\n  parseError = e.message;\n}\n\nif (!dataArray || !Array.isArray(dataArray)) {\n  return [{\n    json: {\n      success: false,\n      error: 'AI returned invalid response',\n      parse_error: parseError || 'Not a JSON array',\n      creators: [],\n      total_found: 0\n    }\n  }];\n}\n\nif (dataArray.length === 0) {\n  return [{\n    json: {\n      success: true,\n      message: 'No creators found matching your criteria.',\n      creators: [],\n      total_found: 0\n    }\n  }];\n}\n\nconst creators = dataArray.map(c => ({\n  name: c.name || 'Unknown',\n  profile_url: c.profile_url || '',\n  follower_count: typeof c.follower_count === 'number'\n    ? c.follower_count\n    : parseInt(String(c.follower_count).replace(/[^0-9]/g, '')) || 0,\n  videos_count: typeof c.videos_count === 'number'\n    ? c.videos_count\n    : parseInt(String(c.videos_count || c.videos_cout || '0').replace(/[^0-9]/g, '')) || 0,\n  contact_info: c.contact_info || 'N/A',\n  country: c.country || '',\n  language: c.language || '',\n  gender: c.gender || '',\n  niche: c.niche || ''\n}));\n\nconst valid = creators.filter(c => c.profile_url && c.profile_url.startsWith('http'));\n\nreturn [{\n  json: {\n    success: true,\n    total_found: valid.length,\n    creators: valid\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1160,
+        480
+      ],
+      "id": "5f2b599a-3dad-4800-b089-19d2cd5a5f6f",
+      "name": "Parse Search Results"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        1400,
+        480
+      ],
+      "id": "respond-search-001",
+      "name": "Respond (Search)"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Write a personalized outreach message for this UGC content creator:\n\nCreator Name: {{ $('Webhook').first().json.body.creator.name }}\nPlatform: {{ $('Webhook').first().json.body.creator.platform }}\nNiche: {{ $('Webhook').first().json.body.creator.niche }}\nCountry: {{ $('Webhook').first().json.body.creator.country }}\nLanguage: {{ $('Webhook').first().json.body.creator.language }}\nFollowers: {{ $('Webhook').first().json.body.creator.follower_count }}\nContact Info: {{ $('Webhook').first().json.body.creator.contact_info }}\nProfile URL: {{ $('Webhook').first().json.body.creator.profile_url }}\n\nCampaign Name: {{ $('Webhook').first().json.body.campaign_name }}\nOutreach Channel: {{ $('Webhook').first().json.body.outreach_channel }}\n\nClient's Instructions:\n{{ $('Webhook').first().json.body.client_notes }}",
+        "options": {
+          "systemMessage": "# Role\nYou are a professional UGC outreach specialist. You write personalized, compelling messages to content creators on behalf of brands.\n\n# Rules\n1. ALWAYS personalize the message using the creator's name, niche, and platform.\n2. Reference their content style or niche authentically.\n3. Keep the tone friendly, professional, and concise.\n4. Mention the campaign name naturally.\n5. Adapt the format based on outreach_channel:\n   - email: Include a subject line (format: Subject: ...), proper greeting, body, and sign-off\n   - instagram_dm / tiktok_dm: Keep it shorter, casual but professional, no subject line\n   - whatsapp: Brief and conversational, include the brand mention early\n   - other: Use a general professional format\n6. If client_notes are provided, incorporate their specific requirements.\n7. Include a clear call-to-action.\n8. Do NOT use excessive emojis. Max 2-3 relevant emojis.\n9. Do NOT use overly salesy language.\n10. Write in the creator's language if specified, otherwise default to English.\n\n# Output\nReturn ONLY the message text. No JSON, no code blocks, no markdown.\nFor emails, start with 'Subject: ...' on the first line."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        660,
+        60
+      ],
+      "id": "outreach-agent-001",
+      "name": "Outreach Message Writer"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        660,
+        280
+      ],
+      "id": "outreach-gemini-001",
+      "name": "Gemini (Outreach)",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "a9X48ny3Qi0mJt7m",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const rawMessage = $json.output || '';\n\nreturn [{\n  json: {\n    success: true,\n    message: rawMessage.trim(),\n    generated_at: new Date().toISOString()\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        920,
+        60
+      ],
+      "id": "outreach-parse-001",
+      "name": "Format Outreach Response"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        1160,
+        60
+      ],
+      "id": "respond-outreach-001",
+      "name": "Respond (Outreach)"
+    },
+    {
+      "parameters": {
+        "jsCode": "const body = $('Webhook').first().json.body;\n\nlet subject = 'Collaboration Opportunity - ' + (body.campaign_name || 'Campaign');\nlet emailBody = body.message_body || '';\n\nif (emailBody.startsWith('Subject:')) {\n  const firstNewline = emailBody.indexOf('\\n');\n  if (firstNewline > 0) {\n    subject = emailBody.substring(8, firstNewline).trim();\n    emailBody = emailBody.substring(firstNewline + 1).trim();\n  }\n}\n\nreturn [{\n  json: {\n    success: true,\n    to: body.creator_email,\n    subject: subject,\n    body: emailBody,\n    message_id: body.message_id,\n    sent_at: new Date().toISOString()\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        900,
+        260
+      ],
+      "id": "send-email-code-001",
+      "name": "Send Email (Configure SMTP)"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        1160,
+        260
+      ],
+      "id": "respond-send-001",
+      "name": "Respond (Send)"
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Is Outreach?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is Outreach?": {
+      "main": [
+        [
+          {
+            "node": "Outreach Message Writer",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Is Send Email?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is Send Email?": {
+      "main": [
+        [
+          {
+            "node": "Send Email (Configure SMTP)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "UGC Creator Researcher",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "UGC Creator Researcher": {
+      "main": [
+        [
+          {
+            "node": "Parse Search Results",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tavily Search": {
+      "ai_tool": [
+        [
+          {
+            "node": "UGC Creator Researcher",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gemini (Search)": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "UGC Creator Researcher",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Search Results": {
+      "main": [
+        [
+          {
+            "node": "Respond (Search)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Outreach Message Writer": {
+      "main": [
+        [
+          {
+            "node": "Format Outreach Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gemini (Outreach)": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Outreach Message Writer",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Outreach Response": {
+      "main": [
+        [
+          {
+            "node": "Respond (Outreach)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Email (Configure SMTP)": {
+      "main": [
+        [
+          {
+            "node": "Respond (Send)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "instanceId": "e6018ebe94d965098d2b2105c8e466be12c4f8295c66301245a551703062d7bf"
+  }
+}

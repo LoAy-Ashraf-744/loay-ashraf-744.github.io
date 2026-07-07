@@ -1,0 +1,110 @@
+.hubSection {
+  background-color: var(--hub-bg);
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  padding: 6rem 0;
+}
+
+.hubContainer {
+  width: 100%;
+}
+
+.splitLayout {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4rem;
+  width: 100%;
+}
+
+.leftCol {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 3rem; /* large spacing as per sketch */
+}
+
+.rightCol {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* Big Text Buttons */
+.categoryBtn {
+  background: transparent;
+  border: none;
+  color: white;
+  font-family: var(--font-inter, 'Inter', sans-serif);
+  font-size: 3rem; /* Very large text */
+  font-weight: 700;
+  text-align: left;
+  cursor: none; /* for custom GSAP cursor */
+  transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+  position: relative;
+  transform-origin: left center;
+  letter-spacing: -1px;
+}
+
+.categoryBtn::after {
+  content: '';
+  position: absolute;
+  left: -20px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 8px;
+  height: 8px;
+  background-color: white;
+  border-radius: 50%;
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+.categoryBtn:hover {
+  transform: translateX(20px);
+  color: #fff;
+  text-shadow: 0 0 20px rgba(255,255,255,0.3);
+}
+
+.categoryBtn:hover::after {
+  opacity: 1;
+}
+
+@media (max-width: 1024px) {
+  .categoryBtn {
+    font-size: 2.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .splitLayout {
+    flex-direction: column;
+    text-align: center;
+    gap: 5rem;
+  }
+  
+  .leftCol {
+    align-items: center;
+    gap: 2rem;
+  }
+
+  .rightCol {
+    justify-content: center;
+  }
+  
+  .categoryBtn {
+    font-size: 2rem;
+    text-align: center;
+    transform-origin: center center;
+  }
+  
+  .categoryBtn:hover {
+    transform: scale(1.05);
+  }
+  
+  .categoryBtn::after {
+    display: none;
+  }
+}

@@ -1,0 +1,452 @@
+{
+  "name": "lead-gen",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Lead Generation Form",
+        "formDescription": "Generate leads using LinkedIn or Google Maps",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Select Lead Source",
+              "fieldType": "dropdown",
+              "fieldName": "source",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "LinkedIn"
+                  },
+                  {
+                    "option": "Google Maps"
+                  }
+                ]
+              },
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Current Job Title (LinkedIn)",
+              "fieldName": "current_job_title",
+              "placeholder": "e.g. software engineer"
+            },
+            {
+              "fieldLabel": "Place Category (Google Maps)",
+              "fieldName": "place_category",
+              "placeholder": "e.g. restaurant"
+            },
+            {
+              "fieldLabel": "Location",
+              "fieldName": "location",
+              "placeholder": "e.g. Egypt or New York, USA",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Include Email (LinkedIn)",
+              "fieldType": "dropdown",
+              "fieldName": "include_email",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "True"
+                  },
+                  {
+                    "option": "False"
+                  }
+                ]
+              },
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "feb0d3b5-6947-4e93-9e4d-8371cd182e4c",
+      "name": "Form Lead Request",
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.6,
+      "position": [
+        0,
+        96
+      ],
+      "webhookId": "f2599a5c-a800-43ef-a436-02f9e742f134"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.source }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              },
+              "rightValue": "Google Maps",
+              "id": "b47124b6-1904-497b-8f2a-c6772d41dc2e"
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "9039dd5e-98d0-4c0f-99c4-83704f0f9c97",
+      "name": "Check Lead Source",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        224,
+        96
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return $input.all().map(item => {\n  return {\n    json: {\n      \"Name\": item.json.title,\n      \"Phone\": item.json.phone || \"غير متوفر\",\n      \"Rating\": item.json.totalScore || \"غير متوفر\",\n      \"Reviews\": item.json.reviewsCount || 0,\n      \"Google Map Link\": item.json.url\n    }\n  };\n});"
+      },
+      "id": "74ea388e-b2b9-44e5-b77c-dd6d2c3b39c3",
+      "name": "Clean Google Maps Data",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        672,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1rLJ-szPsCcB4ZbVO9GPPQREfeopLKsMN85Y_e5n4Yao",
+          "mode": "list",
+          "cachedResultName": "Leads2",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1rLJ-szPsCcB4ZbVO9GPPQREfeopLKsMN85Y_e5n4Yao/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 592014874,
+          "mode": "list",
+          "cachedResultName": "Google Maps",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1rLJ-szPsCcB4ZbVO9GPPQREfeopLKsMN85Y_e5n4Yao/edit#gid=592014874"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Name": "={{ $json.Name }}",
+            "Phone": "=\"{{ $json.Phone }}\"",
+            "Rating": "={{ $json.Rating }}",
+            "Reviews ": "={{ $json.Reviews }}",
+            "Google Map Link": "={{ $json[\"Google Map Link\"] }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Phone",
+              "displayName": "Phone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Rating",
+              "displayName": "Rating",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Reviews ",
+              "displayName": "Reviews ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Google Map Link",
+              "displayName": "Google Map Link",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "16c28423-bfd9-4799-8486-807514ac22bc",
+      "name": "Save Google Maps Leads",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        896,
+        0
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "3cc3txh5JK3HWBFy",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1rLJ-szPsCcB4ZbVO9GPPQREfeopLKsMN85Y_e5n4Yao",
+          "mode": "list",
+          "cachedResultName": "Leads2",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1rLJ-szPsCcB4ZbVO9GPPQREfeopLKsMN85Y_e5n4Yao/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Linked in",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1rLJ-szPsCcB4ZbVO9GPPQREfeopLKsMN85Y_e5n4Yao/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Full Name": "={{ $json['Full Name'] }}",
+            "Headl Line": "={{ $json.Headline }}",
+            "Email": "={{ $json['Email'] }}",
+            "Profile Url": "={{ $json['Profile URL'] }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Full Name",
+              "displayName": "Full Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Headl Line",
+              "displayName": "Headl Line",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Profile Url",
+              "displayName": "Profile Url",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "91d75e84-6fd7-40fc-99df-ebf955499035",
+      "name": "Save LinkedIn Leads",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        896,
+        192
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "3cc3txh5JK3HWBFy",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const cleaned = [];\n\nfor (const item of $input.all()) {\n  const d = item.json;\n  const info = d.basic_info || {};\n  const exp  = Array.isArray(d.experience) ? d.experience : [];\n  const edu  = Array.isArray(d.education)  ? d.education  : [];\n\n  // ── Helpers ──────────────────────────────────────────────────────\n  const clean = (val) =>\n    typeof val === 'string' && val.trim() ? val.trim() : '';\n\n  const isPublicUrl = (url) =>\n    typeof url === 'string' &&\n    url.startsWith('http') &&\n    !url.includes('/overlay/') &&\n    !url.includes('search/results');\n\n  // ── Current / most-recent experience ─────────────────────────────\n  const currentExp = exp.find((e) => e.is_current) || exp[0] || {};\n\n  // ── Most recent education ─────────────────────────────────────────\n  const latestEdu = edu[0] || {};\n\n  // ── Location string ───────────────────────────────────────────────\n  const loc = info.location || {};\n  const locationParts = [clean(loc.city), clean(loc.country)].filter(Boolean);\n  const location = locationParts.join(', ');\n\n  // ── Profile picture (only real public URLs) ───────────────────────\n  const profilePicture = isPublicUrl(info.profile_picture_url)\n    ? info.profile_picture_url\n    : '';\n\n  // ── Skills (join top_skills array into a string) ──────────────────\n  const topSkills = Array.isArray(info.top_skills)\n    ? info.top_skills.filter(Boolean).join(', ')\n    : '';\n\n  // ── Experience skills (from current/latest role) ──────────────────\n  const expSkills = Array.isArray(currentExp.skills)\n    ? currentExp.skills.filter(Boolean).join(', ')\n    : '';\n\n  cleaned.push({\n    json: {\n      // ── Identity ────────────────────────────────────────────────\n      'Full Name':        clean(info.fullname),\n      'First Name':       clean(info.first_name),\n      'Last Name':        clean(info.last_name),\n\n      // ── Contact ─────────────────────────────────────────────────\n      'Email':            clean(info.email),\n      'Profile URL':      isPublicUrl(info.profile_url) ? info.profile_url : '',\n      'Profile Picture':  profilePicture,\n\n      // ── Headline & About ─────────────────────────────────────────\n      'Headline':         clean(info.headline),\n      'About':            clean(info.about),\n\n      // ── Location ─────────────────────────────────────────────────\n      'Location':         location,\n      'City':             clean(loc.city),\n      'Country':          clean(loc.country),\n\n      // ── Current Role ─────────────────────────────────────────────\n      'Current Company':  clean(info.current_company),\n      'Current Job Title': clean(currentExp.title),\n      'Employment Type':  clean(currentExp.employment_type),\n      'Work Type':        clean(currentExp.location_type), // Remote / On-site / Hybrid\n      'Job Start Date':   currentExp.start_date\n                            ? `${currentExp.start_date.month || ''} ${currentExp.start_date.year || ''}`.trim()\n                            : '',\n\n      // ── Education ────────────────────────────────────────────────\n      'School':           clean(latestEdu.school),\n      'Degree':           clean(latestEdu.degree_name),\n      'Field of Study':   clean(latestEdu.field_of_study),\n\n      // ── Skills ───────────────────────────────────────────────────\n      'Top Skills':       topSkills,\n      'Role Skills':      expSkills,\n\n      // ── Social Signals ────────────────────────────────────────────\n      'Followers':        typeof info.follower_count   === 'number' ? info.follower_count   : '',\n      'Connections':      typeof info.connection_count === 'number' ? info.connection_count : '',\n      'Is Premium':       info.is_premium   === true ? 'Yes' : 'No',\n      'Is Verified':      info.is_verified  === true ? 'Yes' : 'No',\n      'Open to Work':     info.open_to_work === true ? 'Yes' : 'No',\n    }\n  });\n}\n\nreturn cleaned;"
+      },
+      "id": "fea3c387-bb15-4e83-b2d8-973581db8ea3",
+      "name": "Clean LinkedIn Data",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        672,
+        192
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "Run actor and get dataset",
+        "actorId": {
+          "__rl": true,
+          "value": "https://console.apify.com/actors/pIyH7237rHZBxoO7q",
+          "mode": "url"
+        },
+        "customBody": "={\n    \"current_job_title\": \"{{ $json.current_job_title }}\",\n    \"include_email\": true,\n    \"location\": \"{{ $json.location }}\"\n}"
+      },
+      "type": "@apify/n8n-nodes-apify.apify",
+      "typeVersion": 1,
+      "position": [
+        448,
+        192
+      ],
+      "id": "da02e30b-6c05-4827-8854-902ea469940e",
+      "name": "Scrape Linked In",
+      "credentials": {
+        "apifyApi": {
+          "id": "feZfiltyM9jUqcfM",
+          "name": "Apify account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "Run actor and get dataset",
+        "actorId": {
+          "__rl": true,
+          "value": "https://console.apify.com/actors/nwua9Gu5YrADL7ZDj/",
+          "mode": "url"
+        },
+        "customBody": "={\n    \"includeWebResults\": false,\n    \"language\": \"en\",\n    \"locationQuery\": \"{{ $json.location }}\",\n    \"maxCrawledPlacesPerSearch\": 10,\n    \"scrapeContacts\": true,\n    \"scrapeDirectories\": false,\n    \"scrapeImageAuthors\": false,\n    \"scrapeOrderOnline\": false,\n    \"scrapePlaceDetailPage\": false,\n    \"scrapeReviewsPersonalData\": false,\n    \"scrapeSocialMediaProfiles\": {\n        \"facebooks\": true,\n        \"instagrams\": true,\n        \"tiktoks\": true,\n        \"twitters\": true,\n        \"youtubes\": true\n    },\n    \"scrapeTableReservationProvider\": false,\n    \"searchStringsArray\": [\n        \"{{ $json.place_category }}\"\n    ],\n    \"skipClosedPlaces\": false,\n    \"verifyLeadsEnrichmentEmails\": false\n}"
+      },
+      "type": "@apify/n8n-nodes-apify.apify",
+      "typeVersion": 1,
+      "position": [
+        448,
+        0
+      ],
+      "id": "cb0d2ab2-d553-4a1d-b798-e0af003bfeb8",
+      "name": "Scrape Google Maps",
+      "credentials": {
+        "apifyApi": {
+          "id": "feZfiltyM9jUqcfM",
+          "name": "Apify account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Form Lead Request": {
+      "main": [
+        [
+          {
+            "node": "Check Lead Source",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Clean Google Maps Data": {
+      "main": [
+        [
+          {
+            "node": "Save Google Maps Leads",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Clean LinkedIn Data": {
+      "main": [
+        [
+          {
+            "node": "Save LinkedIn Leads",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Lead Source": {
+      "main": [
+        [
+          {
+            "node": "Scrape Google Maps",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Scrape Linked In",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Scrape Linked In": {
+      "main": [
+        [
+          {
+            "node": "Clean LinkedIn Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Scrape Google Maps": {
+      "main": [
+        [
+          {
+            "node": "Clean Google Maps Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": true
+  },
+  "versionId": "5f48474e-179c-4de6-9603-6f61f34c38fb",
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp",
+    "templateCredsSetupCompleted": true,
+    "instanceId": "2e755f9d5219cdd707ca7a16e4be8bcd35a5600d9d7a9cb3050e6ed71a67c617"
+  },
+  "nodeGroups": [],
+  "id": "jL08Ahvspr6CGMz4",
+  "tags": []
+}

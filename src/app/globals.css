@@ -1,0 +1,136 @@
+:root {
+  --color-bg: #000000;
+  --color-text: #ffffff;
+  --color-accent: #a0a0a0;
+  
+  /* Projects Hub Colors */
+  --hub-bg: #050505;
+  --card-bg: rgba(255, 255, 255, 0.03);
+  --card-border: rgba(255, 255, 255, 0.06);
+  --card-border-hover: rgba(255, 255, 255, 0.14);
+  --card-glow: rgba(120, 120, 255, 0.06);
+  --tab-active: #ffffff;
+  --tab-inactive: #555555;
+  --tab-indicator: linear-gradient(90deg, #6366f1, #8b5cf6);
+  --badge-bg: rgba(255, 255, 255, 0.06);
+  --ai-accent: linear-gradient(135deg, #7c3aed, #3b82f6);
+  --action-primary: #ffffff;
+  --action-ghost: rgba(255, 255, 255, 0.5);
+
+  --font-inter-fallback: 'Inter', sans-serif;
+  
+  --spacing-unit: 1rem;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-inter, var(--font-inter-fallback));
+  scroll-behavior: smooth;
+  cursor: none; /* Hide default cursor for custom GSAP cursor */
+  scroll-snap-type: y mandatory;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  cursor: none; /* Let custom cursor handle links */
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-bg);
+}
+::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-accent);
+}
+
+/* Utility classes */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.section {
+  min-height: 100vh;
+  padding: 6rem 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  scroll-snap-align: start;
+}
+
+.section-title {
+  font-size: 3rem;
+  font-weight: 800;
+  margin-bottom: 3rem;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  font-family: var(--font-playfair, 'Playfair Display', serif);
+}
+
+/* Hide custom cursor on mobile */
+@media (max-width: 768px) {
+  html, body, a {
+    cursor: auto;
+  }
+}
+
+/* Font Utilities */
+.font-inter {
+  font-family: var(--font-inter, 'Inter', sans-serif);
+}
+
+.font-outfit {
+  font-family: var(--font-outfit, 'Outfit', sans-serif);
+}
+
+.font-montserrat {
+  font-family: var(--font-montserrat, 'Montserrat', sans-serif);
+}
+
+.font-playfair {
+  font-family: var(--font-playfair, 'Playfair Display', serif);
+}
+
+.font-fira-code {
+  font-family: var(--font-fira-code, 'Fira Code', monospace);
+}
+
+/* Handwritten & Script Fonts */
+.font-caveat {
+  font-family: var(--font-caveat, 'Caveat', cursive);
+}
+
+.font-dancing {
+  font-family: var(--font-dancing, 'Dancing Script', cursive);
+}
+
+.font-pacifico {
+  font-family: var(--font-pacifico, 'Pacifico', cursive);
+}
+
+.font-permanent-marker {
+  font-family: var(--font-permanent-marker, 'Permanent Marker', cursive);
+}
+
+.font-satisfy {
+  font-family: var(--font-satisfy, 'Satisfy', cursive);
+}

@@ -1,0 +1,38 @@
+.sideNavContainer {
+  position: fixed;
+  right: 3rem;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 100;
+  mix-blend-mode: difference;
+}
+
+.label {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%) translateX(50px);
+  font-size: 1.2rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: white;
+  opacity: 0;
+  transition: opacity 0.4s ease, transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.label.active {
+  opacity: 1;
+  transform: translateY(-50%) translateX(0);
+}
+
+@media (max-width: 768px) {
+  .sideNavContainer {
+    right: 1.5rem;
+  }
+  .label {
+    font-size: 1rem;
+  }
+}

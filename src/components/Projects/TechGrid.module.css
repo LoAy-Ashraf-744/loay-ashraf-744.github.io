@@ -1,0 +1,50 @@
+.gridContainer {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 450px;
+}
+
+.iconBox {
+  aspect-ratio: 1 / 1;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.iconBox:hover {
+  transform: translateY(-8px) scale(1.05);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+  z-index: 10;
+}
+
+/* Specific Backgrounds */
+.jsBg {
+  background-color: #F7DF1E;
+}
+
+.tsBg {
+  background-color: #3178C6;
+}
+
+.whiteBg {
+  background-color: #FFFFFF;
+  border-radius: 50%; /* Circle for next.js as per sketch */
+}
+
+.darkBg {
+  background-color: #0a0a0a;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+@media (max-width: 768px) {
+  .gridContainer {
+    max-width: 300px;
+    gap: 1rem;
+    margin: 0 auto;
+  }
+}
