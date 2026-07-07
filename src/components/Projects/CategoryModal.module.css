@@ -125,7 +125,7 @@
     grid-template-columns: 1fr;
   }
   .application {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1fr;
   }
   .automation {
     grid-template-columns: 1fr;
